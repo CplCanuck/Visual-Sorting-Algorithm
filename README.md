@@ -1,2 +1,2 @@
 # sfml-cplusplus
-Projects in C++ using SFML
+Sorting Algorithm(s) in C++ using SFML
