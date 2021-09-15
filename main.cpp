@@ -1,4 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <random>
+#include <time.h>
+#include <vector>
+#include <algorithm>
 
 int main()
 {
@@ -12,6 +16,9 @@ int main()
     float screenWidth = window.getSize().x;
     float screenHeight = window.getSize().y;
 
+    unsigned seed = time(NULL); //initialize the random seed
+    auto rng = std::default_random_engine(seed);
+
 
 
     /**Game Objects**/
@@ -21,13 +28,19 @@ int main()
     float barHeightMultiplier = screenHeight/numOfBars;
     
     //declare bars[]
-    sf::RectangleShape bars[numOfBars];
+    std::vector<sf::RectangleShape> bars;
 
     //defining bars[]
     for(int i = 0; i < numOfBars; i++){
-        bars[i].setFillColor(sf::Color::White);
-        bars[i].setSize(sf::Vector2f(barWidths, (i + 1) * barHeightMultiplier));
-        bars[i].setPosition(sf::Vector2f(i * barWidths, screenHeight - ((i + 1) * barHeightMultiplier)));
+        sf::RectangleShape tempBar(sf::Vector2f(barWidths, (i + 1) * barHeightMultiplier));
+        bars.push_back(tempBar);
+    }
+
+    //randomize into bars[]
+    std::shuffle(bars.begin(), bars.end(), rng);
+
+    for(int i = 0; i < bars.size(); i++){
+        bars[i].setPosition(sf::Vector2f(i * barWidths, screenHeight - bars[i].getSize().y));
     }
 
 
