@@ -26,7 +26,7 @@ int main()
     bool isSolved = false;
 
     //bars
-    int numOfBars = 50;
+    int numOfBars = 100;
     float barWidths = screenWidth/numOfBars;
     float barHeightMultiplier = screenHeight/numOfBars;
     
@@ -92,17 +92,6 @@ int main()
                 bars[current + 2].setFillColor(sf::Color::Green);
             }
             current++;
-        }
-
-        if(isSolved){
-            window.clear();
-
-            for(int i = 0; i < numOfBars; i++){
-                bars[i].setPosition(sf::Vector2f(i * barWidths, screenHeight - bars[i].getSize().y));
-                window.draw(bars[i]);
-            }
-            
-            window.display();
         }
     }
 
