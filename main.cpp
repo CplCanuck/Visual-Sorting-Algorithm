@@ -7,23 +7,26 @@
 int main()
 {
     /**Window**/
-    sf::RenderWindow window(sf::VideoMode(1000, 500), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1000, 500), "Bubble Sort");
     window.setFramerateLimit(144);
 
 
 
-    /**Macro Variables**/
+    /**Game Objects**/
+    //variables
     float screenWidth = window.getSize().x;
     float screenHeight = window.getSize().y;
 
     unsigned seed = time(NULL); //initialize the random seed
     auto rng = std::default_random_engine(seed);
 
+    int maxSwaps = 3000;
+    int swaps = 0;
+    int current = 0;
+    bool isSolved = false;
 
-
-    /**Game Objects**/
     //bars
-    int numOfBars = 100;
+    int numOfBars = 50;
     float barWidths = screenWidth/numOfBars;
     float barHeightMultiplier = screenHeight/numOfBars;
     
@@ -63,16 +66,44 @@ int main()
             }
         }
 
-        //Update
+        //Update and Render
+        if(current < bars.size() - 1 && swaps < maxSwaps){
+            for(int j = current+1; j < bars.size(); j++){
+                if(bars[current].getSize().y > bars[j].getSize().y){
+                    //Swap
+                     std::iter_swap(bars.begin()+current, bars.begin()+j);
 
-        //Render
-        window.clear();
+                    //Render
+                    window.clear();
 
-        for(int i = 0; i < numOfBars; i++){
-            window.draw(bars[i]);
+                    for(int i = 0; i < numOfBars; i++){
+                        bars[i].setPosition(sf::Vector2f(i * barWidths, screenHeight - bars[i].getSize().y));
+                        window.draw(bars[i]);
+                    }
+
+                    window.display();
+                    
+                    swaps++;
+                }
+            }
+            bars[current].setFillColor(sf::Color::Green);
+            if(current == bars.size() - 3){
+                bars[current + 1].setFillColor(sf::Color::Green);
+                bars[current + 2].setFillColor(sf::Color::Green);
+            }
+            current++;
         }
 
-        window.display();
+        if(isSolved){
+            window.clear();
+
+            for(int i = 0; i < numOfBars; i++){
+                bars[i].setPosition(sf::Vector2f(i * barWidths, screenHeight - bars[i].getSize().y));
+                window.draw(bars[i]);
+            }
+            
+            window.display();
+        }
     }
 
     return 0;
